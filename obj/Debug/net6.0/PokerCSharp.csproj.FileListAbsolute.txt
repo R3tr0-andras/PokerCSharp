@@ -12,3 +12,17 @@ C:\Users\Andra\OneDrive\Bureau\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\r
 C:\Users\Andra\OneDrive\Bureau\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.pdb
 C:\Users\Andra\OneDrive\Bureau\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.genruntimeconfig.cache
 C:\Users\Andra\OneDrive\Bureau\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\ref\PokerCSharp.dll
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\bin\Debug\net6.0\PokerCSharp.exe
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\bin\Debug\net6.0\PokerCSharp.deps.json
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\bin\Debug\net6.0\PokerCSharp.runtimeconfig.json
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\bin\Debug\net6.0\PokerCSharp.dll
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\bin\Debug\net6.0\PokerCSharp.pdb
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.AssemblyInfoInputs.cache
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.AssemblyInfo.cs
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.csproj.CoreCompileInputs.cache
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.dll
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\refint\PokerCSharp.dll
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.pdb
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\PokerCSharp.genruntimeconfig.cache
+C:\Users\Andra\Desktop\visual\PokerCSharp\PokerCSharp\obj\Debug\net6.0\ref\PokerCSharp.dll

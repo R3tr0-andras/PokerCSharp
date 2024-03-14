@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Andra\\OneDrive\\Bureau\\visual\\PokerCSharp\\PokerCSharp\\PokerCSharp.csproj",
+      "projectUniqueName": "C:\\Users\\Andra\\Desktop\\visual\\PokerCSharp\\PokerCSharp\\PokerCSharp.csproj",
       "projectName": "PokerCSharp",
-      "projectPath": "C:\\Users\\Andra\\OneDrive\\Bureau\\visual\\PokerCSharp\\PokerCSharp\\PokerCSharp.csproj",
+      "projectPath": "C:\\Users\\Andra\\Desktop\\visual\\PokerCSharp\\PokerCSharp\\PokerCSharp.csproj",
       "packagesPath": "C:\\Users\\Andra\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Andra\\OneDrive\\Bureau\\visual\\PokerCSharp\\PokerCSharp\\obj\\",
+      "outputPath": "C:\\Users\\Andra\\Desktop\\visual\\PokerCSharp\\PokerCSharp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
