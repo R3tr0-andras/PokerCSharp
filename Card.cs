@@ -36,5 +36,7 @@ namespace PokerCSharp
                 deck[n] = value;
             }
         }
+
+
     }
 }

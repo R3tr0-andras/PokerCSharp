@@ -17,28 +17,59 @@ namespace PokerCSharp
             List<string> deck = traitementCard.CreateDeck(suits, ranks);
             traitementCard.ShuffleDeck(deck);
 
+            //Mise en place de la table 
+            string[] table = new string[5];
+
             //Mise en place des joueurs
             int joueurActuel = ui.NumberPlayer();
             List<string> players = new List<string>();
 
-            //Distribution de deux cartes par joueurs
-            string[,] handPlayer = player.initializeAndDistribute(joueurActuel, deck);
+            //Mise en place des jettons joueurs
+            int[] argent = new int[joueurActuel];
 
-            // Afficher les mains
+            //mettre l'argent dans la partie
             for (int i = 0; i < joueurActuel; i++)
             {
-                for (int j = 0; j < 2; j++)
-                {
-                    Console.Write(handPlayer[i, j] + " ");
-                }
-                Console.WriteLine();
+                argent[i] = 2500;
             }
 
+            //Mise en place du pot
+            int pot;
+
             //Mise des cartes sur la table
-
             //3 cartes puis une par une jusqu'à 5 cartes
-            
+            table = player.FirstDistribution(ref deck);
 
+            for(int i = 0;i < table.Length; i++)
+            {
+                Console.WriteLine(table[i]);
+            }
+
+            table = player.DistributionToTable(ref deck);
+            for (int i = 0; i < table.Length; i++)
+            {
+                Console.WriteLine(table[i]);
+            }
+
+            table = player.DistributionToTable(ref deck);
+            for (int i = 0; i < table.Length; i++)
+            {
+                Console.WriteLine(table[i]);
+            }
+
+            bool finPartie = false;
+
+            do
+            {
+
+                //Distribution de deux cartes par joueurs
+                string[,] handPlayer = player.initializeAndDistribute(joueurActuel, ref deck);
+
+                //Mise des cartes sur la table
+                table = player.FirstDistribution(ref deck);
+
+
+            } while (finPartie == true);
         }
     }
 }
