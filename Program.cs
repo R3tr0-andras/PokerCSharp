@@ -34,42 +34,49 @@ namespace PokerCSharp
             }
 
             //Mise en place du pot
-            int pot;
+            int pot = 0;
 
-            //Mise des cartes sur la table
-            //3 cartes puis une par une jusqu'à 5 cartes
-            table = player.FirstDistribution(ref deck);
+            //Mise en place des mises
+            int mise = 0;
+            int miseBase = 20;
 
-            for(int i = 0;i < table.Length; i++)
+            bool continuerJeu = true;
+
+            while (continuerJeu)
             {
-                Console.WriteLine(table[i]);
-            }
-
-            table = player.DistributionToTable(ref deck);
-            for (int i = 0; i < table.Length; i++)
-            {
-                Console.WriteLine(table[i]);
-            }
-
-            table = player.DistributionToTable(ref deck);
-            for (int i = 0; i < table.Length; i++)
-            {
-                Console.WriteLine(table[i]);
-            }
-
-            bool finPartie = false;
-
-            do
-            {
-
-                //Distribution de deux cartes par joueurs
-                string[,] handPlayer = player.initializeAndDistribute(joueurActuel, ref deck);
-
-                //Mise des cartes sur la table
                 table = player.FirstDistribution(ref deck);
 
+                for (int i = 0; i < table.Length; i++)
+                {
+                    Console.WriteLine(table[i]);
+                }
 
-            } while (finPartie == true);
+                interact.JouerUser();
+                
+                for (int i = 1; i < joueurActuel; i++)
+                {
+                    ia.JouerIa(i, ref argent, ref handPlayer);
+                }
+
+                table = player.DistributionToTable(ref deck);
+                for (int i = 0; i < table.Length; i++)
+                {
+                    Console.WriteLine(table[i]);
+                }
+
+                interact.JouerUser();
+
+                for (int i = 1; i < joueurActuel; i++)
+                {
+                    ia.JouerIa(i, ref argent, ref handPlayer);
+                }
+
+                table = player.DistributionToTable(ref deck);
+                for (int i = 0; i < table.Length; i++)
+                {
+                    Console.WriteLine(table[i]);
+                }
+            }
         }
     }
 }
