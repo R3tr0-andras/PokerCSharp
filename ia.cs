@@ -52,39 +52,29 @@ namespace PokerCSharp
             }
             return table;
         }
-        static void JouerIa(int indexJoueur, ref int[] argent, ref string[,] handPlayer)
+        public void JouerIa(int i,ref int mise, ref int[] argent)
         {
             Random rand = new Random();
-            int choix = rand.Next(3); // Générer un nombre aléatoire entre 0 et 2
+            int choix = rand.Next(2); 
 
             switch (choix)
             {
+                // Relancer
                 case 0:
-                    // Relancer
-                    Console.WriteLine($"Joueur {indexJoueur} a choisi de relancer.");
-
-                    // Générer un montant de relance aléatoire entre 1 et l'argent disponible
-                    int montantRelance = rand.Next(1, argent[indexJoueur] + 1);
-                    Console.WriteLine($"Joueur {indexJoueur} relance de {montantRelance}.");
+                    Random alea = new Random();
+                    int montantRelance = rand.Next(mise + 1, argent[i]);
+                    
+                    Console.WriteLine($"Joueur {i} a choisi de relancer.");
+                    Console.WriteLine($"Joueur {i} relance de {montantRelance}.");
 
                     // Mettre à jour l'argent du joueur en conséquence
-                    argent[indexJoueur] -= montantRelance;
+                    argent[i] -= montantRelance;
+                    mise = montantRelance;
                     break;
 
+                // Suivre
                 case 1:
-                    // Suivre
-                    Console.WriteLine($"Joueur {indexJoueur} a choisi de suivre.");
-                    // Il n'y a rien à faire ici car le joueur suit simplement la mise en cours
-                    break;
-
-                case 2:
-                    // Se coucher
-                    Console.WriteLine($"Joueur {indexJoueur} a choisi de se coucher.");
-                    // Enlever les cartes du joueur de la matrice handPlayer
-                    for (int i = 0; i < handPlayer.GetLength(1); i++)
-                    {
-                        handPlayer[indexJoueur, i] = null; // ou handPlayer[indexJoueur, i] = ""; selon votre préférence
-                    }
+                    Console.WriteLine($"Joueur {i} a choisi de suivre.");
                     break;
 
                 default:
