@@ -40,8 +40,7 @@ namespace PokerCSharp
             int pot = 0;
 
             //Mise en place des mises
-            int mise = 0;
-            int miseBase = 20;
+            int mise = 20;
             bool continuerJeu = true;
             bool tapisPlayer = false;
 
@@ -66,7 +65,7 @@ namespace PokerCSharp
                 // Faire jouer les ordinateurs
                 for (int i = 1; i < joueurActuel; i++)
                 {
-                    ia.JouerIa(i, ref mise, ref argent);
+                    player.JouerIa(i, ref mise, ref argent);
                 }
 
                 table = player.DistributionToTable(ref deck);
@@ -85,10 +84,10 @@ namespace PokerCSharp
                     Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
                 }
 
-                // Faire jouer les ordinateurs
+                // Faire jouer les ordinateurs ludo le bg
                 for (int i = 1; i < joueurActuel; i++)
                 {
-                    ia.JouerIa(i,ref mise, ref argent);
+                    player.JouerIa(i,ref mise, ref argent);
                 }
 
                 table = player.DistributionToTable(ref deck);
@@ -133,7 +132,6 @@ namespace PokerCSharp
                     case 2:
                         Console.WriteLine("Vous avez choisi de vous coucher.");
                         couche = true;
-                        return couche;
                         break;
 
                     // Relancer (miser plus)
@@ -157,6 +155,7 @@ namespace PokerCSharp
                         Console.WriteLine("Erreur choix non reconnu.");
                         break;
                 }
+                return couche;
             }
         }
     }

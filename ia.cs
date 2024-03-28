@@ -55,7 +55,14 @@ namespace PokerCSharp
         public void JouerIa(int i,ref int mise, ref int[] argent)
         {
             Random rand = new Random();
-            int choix = rand.Next(2); 
+            int choix = rand.Next(2);
+            if (argent[i] > mise && choix == 0)
+            {
+                choix = 0;
+            } else
+            {
+                choix = 1;
+            }
 
             switch (choix)
             {
