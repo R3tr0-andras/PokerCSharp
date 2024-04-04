@@ -26,31 +26,26 @@ namespace PokerCSharp
             return (handPlayer);
         }
 
-        public string[] FirstDistribution(ref List<string> deck)
+        public void FirstDistribution(ref List<string> deck, ref string[] table, ref short compteur)
         {
-            string[] table = new string[3];
+            
             Random rand = new Random();
             for (int i = 0; i < 3; i++)
             {
                 int randomIndex = rand.Next(deck.Count);
                 table[i] = deck[randomIndex];
                 deck.RemoveAt(randomIndex);
+                compteur++;
             }
-            return table;
         }
-
-        public string[] DistributionToTable(ref List<string> deck)
+        public void DistributionToTable(ref List<string> deck, ref string[] table, ref short compteur)
         {
-            string[] table = new string[1];
             Random rand = new Random();
 
-            for (int i = 0; i < 1; i++)
-            {
-                int randomIndex = rand.Next(deck.Count);
-                table[i] = deck[randomIndex];
-                deck.RemoveAt(randomIndex);
-            }
-            return table;
+            int randomIndex = rand.Next(deck.Count);
+            table[compteur] = deck[randomIndex];
+            deck.RemoveAt(randomIndex);
+            compteur++;
         }
         public void JouerIa(int i,ref int mise, ref int[] argent)
         {

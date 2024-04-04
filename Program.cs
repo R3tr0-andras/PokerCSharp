@@ -19,10 +19,15 @@ namespace PokerCSharp
 
             //Mise en place de la table 
             string[] table = new string[5];
+            short compteur = 0;
 
             //Mise en place des joueurs
             int joueurActuel = ui.NumberPlayer();
-            List<string> players = new List<string>();
+            Console.Clear();
+            string[,] handPlayer = player.initializeAndDistribute(joueurActuel, ref deck);
+            // PP ia ia ia   ia   ia
+            // [] [] [] []   []   []
+            // [] [] [] []   []   []
 
             //Mise en place des jettons joueurs
             int[] argent = new int[joueurActuel];
@@ -46,18 +51,53 @@ namespace PokerCSharp
 
             while (continuerJeu)
             {
-                table = player.FirstDistribution(ref deck);
+                // Initialiser une nouvelle main de poker
 
-                for (int i = 0; i < table.Length; i++)
+                // Distribuer les cartes aux joueurs
+
+                // Distribuer les cartes sur la table
+
+                // Tours de mise
+
+                // Tour des joueurs humains
+
+                // Tour des joueurs IA
+
+                // Révéler les cartes sur la table
+
+                // Évaluer les mains et déterminer le gagnant
+
+                // Payer les gains
+
+                // Vérifier les conditions de fin de jeu et terminer la boucle si nécessaire
+                // Par exemple, si un joueur a tout son argent, ou si le joueur choisit de quitter
+
+                player.FirstDistribution(ref deck, ref table, ref compteur);
+                // Affichage des cartes sur la table
+                Console.WriteLine("╔═══════════════════════╗");
+                Console.WriteLine("║  Cartes sur la table  ║");
+                Console.WriteLine("╠═══════════════════════╣");
+                for (int i = 0; i < table.Length -2; i++)
                 {
-                    Console.WriteLine(table[i]);
+                    Console.WriteLine("║   " + table[i].ToString().PadRight(18) + "  ║");
                 }
+                Console.WriteLine("╚═══════════════════════╝");
 
                 // Faire jouer le joueur
-                if (couche == false)
+                if (!couche)
                 {
+                    // Affichage des cartes du joueur PP
+                    Console.WriteLine("╔═══════════════════════╗");
+                    Console.WriteLine("║   Vos cartes (PP)     ║");
+                    Console.WriteLine("╠═══════════════════════╣");
+                    for (int j = 0; j < handPlayer.GetLength(1); j++)
+                    {
+                        Console.WriteLine("║   " + handPlayer[0, j].ToString().PadRight(18) + "  ║");
+                    }
+                    Console.WriteLine("╚═══════════════════════╝");
                     couche = FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
-                } else if(couche == true)
+                }
+                else
                 {
                     Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
                 }
@@ -68,18 +108,32 @@ namespace PokerCSharp
                     player.JouerIa(i, ref mise, ref argent);
                 }
 
-                table = player.DistributionToTable(ref deck);
-                for (int i = 0; i < table.Length; i++)
+                player.DistributionToTable(ref deck, ref table, ref compteur);
+                // Affichage des cartes sur la table
+                Console.WriteLine("╔═══════════════════════╗");
+                Console.WriteLine("║  Cartes sur la table  ║");
+                Console.WriteLine("╠═══════════════════════╣");
+                for (int i = 0; i < table.Length - 1; i++)
                 {
-                    Console.WriteLine(table[i]);
+                    Console.WriteLine("║   " + table[i].ToString().PadRight(18) + "  ║");
                 }
+                Console.WriteLine("╚═══════════════════════╝");
 
                 // Faire jouer le joueur
-                if (couche == false)
+                if (!couche)
                 {
+                    // Affichage des cartes du joueur PP
+                    Console.WriteLine("╔═══════════════════════╗");
+                    Console.WriteLine("║   Vos cartes (PP)     ║");
+                    Console.WriteLine("╠═══════════════════════╣");
+                    for (int j = 0; j < handPlayer.GetLength(1); j++)
+                    {
+                        Console.WriteLine("║   " + handPlayer[0, j].ToString().PadRight(18) + "  ║");
+                    }
+                    Console.WriteLine("╚═══════════════════════╝");
                     couche = FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
                 }
-                else if (couche == true) { }
+                else
                 {
                     Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
                 }
@@ -87,14 +141,19 @@ namespace PokerCSharp
                 // Faire jouer les ordinateurs ludo le bg
                 for (int i = 1; i < joueurActuel; i++)
                 {
-                    player.JouerIa(i,ref mise, ref argent);
+                    player.JouerIa(i, ref mise, ref argent);
                 }
 
-                table = player.DistributionToTable(ref deck);
+                player.DistributionToTable(ref deck, ref table, ref compteur);
+                // Affichage des cartes sur la table
+                Console.WriteLine("╔═══════════════════════╗");
+                Console.WriteLine("║  Cartes sur la table  ║");
+                Console.WriteLine("╠═══════════════════════╣");
                 for (int i = 0; i < table.Length; i++)
                 {
-                    Console.WriteLine(table[i]);
+                    Console.WriteLine("║   " + table[i].ToString().PadRight(18) + "  ║");
                 }
+                Console.WriteLine("╚═══════════════════════╝");
             }
 
             static bool FaireJouerUser(ref int pot, ref int mise, ref int[] argent, ref bool tapisPlayer)
@@ -146,7 +205,7 @@ namespace PokerCSharp
                                 Console.WriteLine("Veuillez saisir un montant valide valide : ");
                             }
                             while (!int.TryParse(Console.ReadLine(), out nouvelleMise));
-                        } while (nouvelleMise > mise && nouvelleMise <= argent[0]); 
+                        } while (nouvelleMise > mise && nouvelleMise <= argent[0]);
                         mise = nouvelleMise;
                         break;
 

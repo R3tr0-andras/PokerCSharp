@@ -33,5 +33,7 @@ namespace PokerCSharp
 
             return nbj;
         }
+
+        //Ajout des ascii dans interract
     }
 }
