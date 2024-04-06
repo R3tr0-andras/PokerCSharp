@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata;
 
 namespace PokerCSharp
 {
@@ -11,23 +13,10 @@ namespace PokerCSharp
             ia player = new ia();
             interact ui = new interact();
 
-            //Mise en place des cartes
-            List<string> suits = new List<string> { "Coeur", "Carreau", "Trèfle", "Pique" };
-            List<string> ranks = new List<string> { "As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Roi", "Reine", "Valet" };
-            List<string> deck = traitementCard.CreateDeck(suits, ranks);
-            traitementCard.ShuffleDeck(deck);
-
-            //Mise en place de la table 
-            string[] table = new string[5];
-            short compteur = 0;
-
             //Mise en place des joueurs
-            int joueurActuel = ui.NumberPlayer();
+            int joueurActuel = 0;
+            ui.NPlayer(ref joueurActuel);
             Console.Clear();
-            string[,] handPlayer = player.initializeAndDistribute(joueurActuel, ref deck);
-            // PP ia ia ia   ia   ia
-            // [] [] [] []   []   []
-            // [] [] [] []   []   []
 
             //Mise en place des jettons joueurs
             int[] argent = new int[joueurActuel];
@@ -38,183 +27,377 @@ namespace PokerCSharp
                 argent[i] = 2500;
             }
 
-            //couche
-            bool couche = false;
-
-            //Mise en place du pot
-            int pot = 0;
-
-            //Mise en place des mises
-            int mise = 20;
             bool continuerJeu = true;
-            bool tapisPlayer = false;
-
             while (continuerJeu)
             {
-                // Initialiser une nouvelle main de poker
+                //Mise en place des cartes
+                List<string> suits = new List<string> { "Coeur", "Carreau", "Trèfle", "Pique" };
+                List<string> ranks = new List<string> { "As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Roi", "Reine", "Valet" };
+                List<string> deck = traitementCard.CreateDeck(suits, ranks);
+                traitementCard.ShuffleDeck(deck);
 
-                // Distribuer les cartes aux joueurs
+                //Mise en place de la table 
+                string[] table = new string[5];
+                short compteur = 0;
 
-                // Distribuer les cartes sur la table
+                string[,] handPlayer = traitementCard.initializeAndDistribute(joueurActuel, ref deck);
+                // PP ia ia ia   ia   ia
+                // [] [] [] []   []   []
+                // [] [] [] []   []   []
 
-                // Tours de mise
+                //couche
+                bool couche = false;
 
-                // Tour des joueurs humains
+                //Mise en place du pot
+                int pot = 0;
 
-                // Tour des joueurs IA
+                //Mise en place des mises
+                int mise = 20;
+                bool tapisPlayer = false;
 
-                // Révéler les cartes sur la table
+                traitementCard.FirstDistribution(ref deck, ref table, ref compteur);
+                ui.ShowTable(ref table);
 
-                // Évaluer les mains et déterminer le gagnant
-
-                // Payer les gains
-
-                // Vérifier les conditions de fin de jeu et terminer la boucle si nécessaire
-                // Par exemple, si un joueur a tout son argent, ou si le joueur choisit de quitter
-
-                player.FirstDistribution(ref deck, ref table, ref compteur);
-                // Affichage des cartes sur la table
                 Console.WriteLine("╔═══════════════════════╗");
-                Console.WriteLine("║  Cartes sur la table  ║");
-                Console.WriteLine("╠═══════════════════════╣");
-                for (int i = 0; i < table.Length -2; i++)
-                {
-                    Console.WriteLine("║   " + table[i].ToString().PadRight(18) + "  ║");
-                }
+                Console.WriteLine($"║   Le pot est de :       ║");
+                Console.WriteLine($"║   {pot}                 ║");
                 Console.WriteLine("╚═══════════════════════╝");
 
                 // Faire jouer le joueur
                 if (!couche)
                 {
-                    // Affichage des cartes du joueur PP
+                    ui.ShowCardPlayer(ref handPlayer);
                     Console.WriteLine("╔═══════════════════════╗");
-                    Console.WriteLine("║   Vos cartes (PP)     ║");
-                    Console.WriteLine("╠═══════════════════════╣");
-                    for (int j = 0; j < handPlayer.GetLength(1); j++)
-                    {
-                        Console.WriteLine("║   " + handPlayer[0, j].ToString().PadRight(18) + "  ║");
-                    }
+                    Console.WriteLine($"║   Vous avez :           ║");
+                    Console.WriteLine($"║   {argent[0]} jetons      ║");
                     Console.WriteLine("╚═══════════════════════╝");
-                    couche = FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
+                    couche = ui.FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
                 }
                 else
                 {
                     Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
                 }
 
-                // Faire jouer les ordinateurs
-                for (int i = 1; i < joueurActuel; i++)
+                if (tapisPlayer == true)
                 {
-                    player.JouerIa(i, ref mise, ref argent);
-                }
-
-                player.DistributionToTable(ref deck, ref table, ref compteur);
-                // Affichage des cartes sur la table
-                Console.WriteLine("╔═══════════════════════╗");
-                Console.WriteLine("║  Cartes sur la table  ║");
-                Console.WriteLine("╠═══════════════════════╣");
-                for (int i = 0; i < table.Length - 1; i++)
-                {
-                    Console.WriteLine("║   " + table[i].ToString().PadRight(18) + "  ║");
-                }
-                Console.WriteLine("╚═══════════════════════╝");
-
-                // Faire jouer le joueur
-                if (!couche)
-                {
-                    // Affichage des cartes du joueur PP
-                    Console.WriteLine("╔═══════════════════════╗");
-                    Console.WriteLine("║   Vos cartes (PP)     ║");
-                    Console.WriteLine("╠═══════════════════════╣");
-                    for (int j = 0; j < handPlayer.GetLength(1); j++)
+                    // Faire jouer les ordinateurs
+                    for (int i = 1; i < joueurActuel; i++)
                     {
-                        Console.WriteLine("║   " + handPlayer[0, j].ToString().PadRight(18) + "  ║");
+                        player.JouerIa(i, ref mise, ref argent, ref pot);
                     }
+
+                    traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+                    traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+                    ui.ShowTable(ref table);
+
+                    Console.WriteLine("╔═══════════════════════╗");
+                    Console.WriteLine($"║   Le pot est de :       ║");
+                    Console.WriteLine($"║   {pot}                 ║");
                     Console.WriteLine("╚═══════════════════════╝");
-                    couche = FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
+
+                    //Montrer les cartes des ia
+                    ui.ShowOtherPlayersHands(ref handPlayer);
+
+                    // Appel de DetermineWinner pour déterminer le gagnant
+                    DetermineWinner(ref handPlayer,ref table,ref argent, ref pot);
+
                 }
                 else
                 {
-                    Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
-                }
+                    // Faire jouer les ordinateurs
+                    for (int i = 1; i < joueurActuel; i++)
+                    {
+                        player.JouerIa(i, ref mise, ref argent, ref pot);
+                    }
 
-                // Faire jouer les ordinateurs ludo le bg
-                for (int i = 1; i < joueurActuel; i++)
-                {
-                    player.JouerIa(i, ref mise, ref argent);
-                }
+                    traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+                    ui.ShowTable(ref table);
 
-                player.DistributionToTable(ref deck, ref table, ref compteur);
-                // Affichage des cartes sur la table
-                Console.WriteLine("╔═══════════════════════╗");
-                Console.WriteLine("║  Cartes sur la table  ║");
-                Console.WriteLine("╠═══════════════════════╣");
-                for (int i = 0; i < table.Length; i++)
-                {
-                    Console.WriteLine("║   " + table[i].ToString().PadRight(18) + "  ║");
+                    Console.WriteLine("╔═══════════════════════╗");
+                    Console.WriteLine($"║   Le pot est de :       ║");
+                    Console.WriteLine($"║   {pot}                 ║");
+                    Console.WriteLine("╚═══════════════════════╝");
+
+                    // Faire jouer le joueur
+                    if (!couche)
+                    {
+                        ui.ShowCardPlayer(ref handPlayer);
+                        Console.WriteLine("╔═══════════════════════╗");
+                        Console.WriteLine($"║   Vous avez :           ║");
+                        Console.WriteLine($"║   {argent[0]} jetons      ║");
+                        Console.WriteLine("╚═══════════════════════╝");
+                        couche = ui.FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
+                    }
+
+                    if (tapisPlayer == true)
+                    {
+                        // Faire jouer les ordinateurs ludo le bg
+                        for (int i = 1; i < joueurActuel; i++)
+                        {
+                            player.JouerIa(i, ref mise, ref argent, ref pot);
+                        }
+
+                        traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+                        ui.ShowTable(ref table);
+
+                        Console.WriteLine("╔═══════════════════════╗");
+                        Console.WriteLine($"║   Le pot est de :       ║");
+                        Console.WriteLine($"║   {pot}                 ║");
+                        Console.WriteLine("╚═══════════════════════╝");
+
+                        //Montrer les cartes des ia
+                        ui.ShowOtherPlayersHands(ref handPlayer);
+
+                        // Appel de DetermineWinner pour déterminer le gagnant
+                        DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
+                    }
+                    else
+                    {
+                        // Faire jouer les ordinateurs ludo le bg
+                        for (int i = 1; i < joueurActuel; i++)
+                        {
+                            player.JouerIa(i, ref mise, ref argent, ref pot);
+                        }
+
+                        traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+                        ui.ShowTable(ref table);
+
+                        Console.WriteLine("╔═══════════════════════╗");
+                        Console.WriteLine($"║   Le pot est de :       ║");
+                        Console.WriteLine($"║   {pot}                 ║");
+                        Console.WriteLine("╚═══════════════════════╝");
+
+                        // Faire jouer le joueur
+                        if (!couche)
+                        {
+                            ui.ShowCardPlayer(ref handPlayer);
+                            Console.WriteLine("╔═══════════════════════╗");
+                            Console.WriteLine($"║   Vous avez :           ║");
+                            Console.WriteLine($"║   {argent[0]} jetons      ║");
+                            Console.WriteLine("╚═══════════════════════╝");
+                            couche = ui.FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Le joueur s'est couché(e), alors il passe son tour");
+                        }
+
+                        // Faire jouer les ordinateurs ludo le bg
+                        for (int i = 1; i < joueurActuel; i++)
+                        {
+                            player.JouerIa(i, ref mise, ref argent, ref pot);
+                        }
+
+                        //Montrer les cartes des ia
+                        ui.ShowOtherPlayersHands(ref handPlayer);
+
+                        // Appel de DetermineWinner pour déterminer le gagnant
+                        DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
+                    }
+
+                    Console.WriteLine("Voulez-vous continuer à jouer ? (Oui/Non)");
+                    string choixContinuerInput = Console.ReadLine();
+
+                    choixContinuerInput = choixContinuerInput.ToLower();
+
+                    if (choixContinuerInput == "oui")
+                    {
+                        // Continuer le jeu
+                        Clear(ref suits, ref ranks, ref deck, ref handPlayer, ref compteur, ref table, ref pot, ref tapisPlayer);
+                        Console.Clear();
+                    }
+                    else if (choixContinuerInput == "non")
+                    {
+                        // Terminer le jeu
+                        continuerJeu = false;
+                    }
+                    else
+                    {
+                        // Choix invalide
+                        Console.WriteLine("Choix non valide. Le jeu se terminera.");
+                        continuerJeu = false;
+                    }
                 }
-                Console.WriteLine("╚═══════════════════════╝");
             }
 
-            static bool FaireJouerUser(ref int pot, ref int mise, ref int[] argent, ref bool tapisPlayer)
+            static void DetermineWinner(ref string[,] handPlayer,ref string[] table,ref int[] argent, ref int pot)
             {
-                bool couche = false;
-                byte compteurDeroulement;
-                Console.WriteLine("Que décidez-vous ?");
-                Console.WriteLine("1. Suivre");
-                Console.WriteLine("2. Se coucher");
-                Console.WriteLine("3. Relancer");
-                Console.Write("Votre choix : ");
-
-                byte choixUtilisateur;
-
-                // Boucle pour demander à l'utilisateur de saisir un choix valide
-                do
+                // Définir les valeurs des mains des joueurs
+                List<int> values = new List<int>();
+                for (int i = 0; i < handPlayer.GetLength(0); i++)
                 {
-                    do
+                    List<string> hand = new List<string>();
+                    for (int j = 0; j < handPlayer.GetLength(1); j++)
                     {
-                        Console.WriteLine("Veuillez saisir un choix valide (1, 2 ou 3) : ");
-                    }
-                    while (!byte.TryParse(Console.ReadLine(), out choixUtilisateur));
-                } while (choixUtilisateur < 1 || choixUtilisateur > 3);
-
-                switch (choixUtilisateur)
-                {
-                    // Suivre le jeu
-                    case 1:
-                        Console.WriteLine("Vous avez choisi de suivre.");
-                        pot = pot + mise;
-                        argent[0] = argent[0] - mise;
-                        break;
-
-                    // Se coucher (abondonner)
-                    case 2:
-                        Console.WriteLine("Vous avez choisi de vous coucher.");
-                        couche = true;
-                        break;
-
-                    // Relancer (miser plus)
-                    case 3:
-                        Console.WriteLine("Vous avez choisi de relancer.");
-                        Console.WriteLine("De combien ?");
-                        int nouvelleMise;
-                        do
+                        if (!string.IsNullOrEmpty(handPlayer[i, j]))
                         {
-                            do
-                            {
-                                Console.WriteLine("Veuillez saisir un montant valide valide : ");
-                            }
-                            while (!int.TryParse(Console.ReadLine(), out nouvelleMise));
-                        } while (nouvelleMise > mise && nouvelleMise <= argent[0]);
-                        mise = nouvelleMise;
-                        break;
+                            hand.Add(handPlayer[i, j]);
+                        }
+                    }
+                    hand.AddRange(table);
 
-                    // Erreur dans le switch
-                    default:
-                        Console.WriteLine("Erreur choix non reconnu.");
-                        break;
+                    // Évaluer la main du joueur
+                    int value = EvaluateHand(hand.ToArray());
+                    values.Add(value);
                 }
-                return couche;
+
+                // Trouver le joueur avec la meilleure main
+                int maxIndex = 0;
+                for (int i = 1; i < values.Count; i++)
+                {
+                    if (values[i] > values[maxIndex])
+                    {
+                        maxIndex = i;
+                    }
+                }
+
+                // Afficher le joueur gagnant
+                Console.WriteLine($"Le joueur {maxIndex + 1} remporte la partie avec la meilleure main !");
+
+                // Ajouter le pot à l'argent du joueur gagnant
+                argent[maxIndex] += pot;
+
+                // Remettre le pot à zéro
+                pot = 0;
+            }
+
+            // Fonction pour évaluer la main des joueurs
+            static int EvaluateHand(string[] hand)
+            {
+                // Compter les occurrences de chaque rang et chaque couleur
+                Dictionary<string, int> rankCount = new Dictionary<string, int>();
+                Dictionary<string, int> suitCount = new Dictionary<string, int>();
+
+                foreach (string card in hand)
+                {
+                    string rank = card.Split(' ')[0];
+                    string suit = card.Split(' ')[1];
+
+                    if (!rankCount.ContainsKey(rank))
+                        rankCount[rank] = 1;
+                    else
+                        rankCount[rank]++;
+
+                    if (!suitCount.ContainsKey(suit))
+                        suitCount[suit] = 1;
+                    else
+                        suitCount[suit]++;
+                }
+
+                // Vérifier les combinaisons possibles
+                bool isFlush = suitCount.ContainsValue(5);
+                bool isStraight = IsStraight(rankCount);
+
+                // Évaluer la force de la main en fonction des combinaisons possibles
+                if (isFlush && isStraight)
+                {
+                    return 9; // Quinte flush
+                }
+                else if (rankCount.ContainsValue(4))
+                {
+                    return 8; // Carré
+                }
+                else if (rankCount.ContainsValue(3) && rankCount.ContainsValue(2))
+                {
+                    return 7; // Full
+                }
+                else if (isFlush)
+                {
+                    return 6; // Couleur
+                }
+                else if (isStraight)
+                {
+                    return 5; // Quinte
+                }
+                else if (rankCount.ContainsValue(3))
+                {
+                    return 4; // Brelan
+                }
+                else if (IsTwoPair(rankCount))
+                {
+                    return 3; // Double paire
+                }
+                else if (rankCount.ContainsValue(2))
+                {
+                    return 2; // Paire
+                }
+                else
+                {
+                    return 1; // Carte haute
+                }
+            }
+
+            // Fonction pour vérifier si une main contient une suite
+            static bool IsStraight(Dictionary<string, int> rankCount)
+            {
+                int count = 0;
+                foreach (var kvp in rankCount)
+                {
+                    if (kvp.Value == 1)
+                    {
+                        count++;
+                        if (count == 5)
+                            return true;
+                    }
+                    else
+                    {
+                        count = 0;
+                    }
+                }
+                return false;
+            }
+
+            // Fonction pour vérifier si une main contient deux paires
+            static bool IsTwoPair(Dictionary<string, int> rankCount)
+            {
+                int pairCount = 0;
+                foreach (var kvp in rankCount)
+                {
+                    if (kvp.Value == 2)
+                        pairCount++;
+
+                    if (pairCount == 2)
+                        return true;
+                }
+                return false;
+            }
+
+            static void Clear(ref List<string> suits, ref List<string> ranks, ref List<string> deck,
+                ref string[,] handPlayer, ref short compteur, ref string[] table, ref int pot, ref bool tapisPlayer)
+            {
+                // List
+                suits.Clear();
+                ranks.Clear();
+                deck.Clear();
+
+                // Tableau
+                Array.Clear(table, 0, table.Length);
+
+                // Compteur
+                compteur = 0;
+
+                // Matrice
+                int rows = handPlayer.GetLength(0);
+                int columns = handPlayer.GetLength(1);
+
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                    {
+                        handPlayer[i, j] = null;
+                    }
+                }
+
+                // Pot
+                pot = 0;
+
+                //Mises et Tapis
+                int mise = 20;
+                tapisPlayer = false;
             }
         }
     }

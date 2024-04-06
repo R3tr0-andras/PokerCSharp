@@ -8,80 +8,49 @@ namespace PokerCSharp
 {
     public struct ia
     {
-        public string[,] initializeAndDistribute(int joueurActuel, ref List<string> deck)
-        {
-            string[,] handPlayer = new string[joueurActuel, 2];
-            Random rand = new Random();
-            int index;
-            for (int i = 0; i < joueurActuel; i++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    index = rand.Next(deck.Count);
-                    handPlayer[i, j] = deck[index];
-                    deck.RemoveAt(index);
-                }
-            }
-
-            return (handPlayer);
-        }
-
-        public void FirstDistribution(ref List<string> deck, ref string[] table, ref short compteur)
-        {
-            
-            Random rand = new Random();
-            for (int i = 0; i < 3; i++)
-            {
-                int randomIndex = rand.Next(deck.Count);
-                table[i] = deck[randomIndex];
-                deck.RemoveAt(randomIndex);
-                compteur++;
-            }
-        }
-        public void DistributionToTable(ref List<string> deck, ref string[] table, ref short compteur)
-        {
-            Random rand = new Random();
-
-            int randomIndex = rand.Next(deck.Count);
-            table[compteur] = deck[randomIndex];
-            deck.RemoveAt(randomIndex);
-            compteur++;
-        }
-        public void JouerIa(int i,ref int mise, ref int[] argent)
+        public void JouerIa(int i, ref int mise, ref int[] argent, ref int pot)
         {
             Random rand = new Random();
             int choix = rand.Next(2);
-            if (argent[i] > mise && choix == 0)
+            int montantMinimum = mise + 1;
+            int montantMaximum = argent[i];
+
+            // Assurer que montantMinimum est inférieur ou égal à montantMaximum
+            if (montantMinimum > montantMaximum)
             {
-                choix = 0;
-            } else
-            {
-                choix = 1;
+                int temp = montantMinimum;
+                montantMinimum = montantMaximum;
+                montantMaximum = temp;
             }
 
-            switch (choix)
+            int montantRelance = rand.Next(montantMinimum, montantMaximum + 1);
+
+            if (argent[i] > mise && choix == 0)
             {
                 // Relancer
-                case 0:
-                    Random alea = new Random();
-                    int montantRelance = rand.Next(mise + 1, argent[i]);
-                    
-                    Console.WriteLine($"Joueur {i} a choisi de relancer.");
-                    Console.WriteLine($"Joueur {i} relance de {montantRelance}.");
+                Console.WriteLine("╔══════════════════════════════════════════════╗");
+                Console.WriteLine($"║ Joueur ia {i} a choisi de relancer.            ║");
+                Console.WriteLine($"║ Joueur ia {i} relance de {montantRelance}.                  ║");
+                Console.WriteLine("╚══════════════════════════════════════════════╝");
 
-                    // Mettre à jour l'argent du joueur en conséquence
-                    argent[i] -= montantRelance;
-                    mise = montantRelance;
-                    break;
-
+                // Déduire le montant de relance de l'argent du joueur
+                argent[i] -= montantRelance;
+                // Ajouter le montant de relance au pot
+                pot += montantRelance;
+                // Définir la nouvelle mise
+                mise = montantRelance;
+            }
+            else
+            {
                 // Suivre
-                case 1:
-                    Console.WriteLine($"Joueur {i} a choisi de suivre.");
-                    break;
+                Console.WriteLine("╔══════════════════════════════════════════════╗");
+                Console.WriteLine($"║ Joueur ia {i} a choisi de suivre.              ║");
+                Console.WriteLine("╚══════════════════════════════════════════════╝");
 
-                default:
-                    Console.WriteLine("Choix non valide.");
-                    break;
+                // Le joueur suit en ajoutant sa mise actuelle au pot
+                pot += mise;
+                // Mettre à zéro la mise du joueur
+                argent[i] -= mise;
             }
         }
     }
