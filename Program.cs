@@ -224,10 +224,10 @@ namespace PokerCSharp
                 }
             }
 
-            static void DetermineWinner(ref string[,] handPlayer,ref string[] table,ref int[] argent, ref int pot)
+            static void DetermineWinner(ref string[,] handPlayer, ref string[] table, ref int[] argent, ref int pot)
             {
-                // Définir les valeurs des mains des joueurs
-                List<int> values = new List<int>();
+                // Définir les valeurs des mains des joueurs actifs
+                Dictionary<int, int> playerValues = new Dictionary<int, int>(); // Mapping joueur -> valeur de la main
                 for (int i = 0; i < handPlayer.GetLength(0); i++)
                 {
                     List<string> hand = new List<string>();
@@ -240,30 +240,41 @@ namespace PokerCSharp
                     }
                     hand.AddRange(table);
 
-                    // Évaluer la main du joueur
-                    int value = EvaluateHand(hand.ToArray());
-                    values.Add(value);
-                }
-
-                // Trouver le joueur avec la meilleure main
-                int maxIndex = 0;
-                for (int i = 1; i < values.Count; i++)
-                {
-                    if (values[i] > values[maxIndex])
+                    // Évaluer la main du joueur seulement s'il n'est pas couché
+                    if (hand.Count > 0) // Vérifier si le joueur a au moins une carte en main
                     {
-                        maxIndex = i;
+                        int value = EvaluateHand(hand.ToArray());
+                        playerValues.Add(i, value);
                     }
                 }
 
-                // Afficher le joueur gagnant
-                Console.WriteLine($"Le joueur {maxIndex + 1} remporte la partie avec la meilleure main !");
+                // Trouver la valeur maximale
+                int maxValue = playerValues.Values.Max();
 
-                // Ajouter le pot à l'argent du joueur gagnant
-                argent[maxIndex] += pot;
+                // Trouver les joueurs actifs avec la meilleure main
+                List<int> activeWinners = playerValues.Where(kv => kv.Value == maxValue).Select(kv => kv.Key).ToList();
 
-                // Remettre le pot à zéro
-                pot = 0;
+                // Vérifier s'il n'y a qu'un seul gagnant actif
+                if (activeWinners.Count == 1)
+                {
+                    int winner = activeWinners[0];
+                    argent[winner] += pot; // Le gagnant actif remporte tout le pot
+                    Console.WriteLine($"Le joueur {winner + 1} remporte le pot de {pot} jetons !");
+                    pot = 0; // Remettre le pot à zéro
+                }
+                else
+                {
+                    // Le pot est partagé entre les gagnants actifs
+                    int potPerWinner = pot / activeWinners.Count;
+                    foreach (int winner in activeWinners)
+                    {
+                        argent[winner] += potPerWinner;
+                    }
+                    Console.WriteLine("Il y a une égalité ! Le pot est partagé entre les joueurs gagnants.");
+                    pot = 0; // Remettre le pot à zéro
+                }
             }
+
 
             // Fonction pour évaluer la main des joueurs
             static int EvaluateHand(string[] hand)
@@ -331,6 +342,7 @@ namespace PokerCSharp
                 }
             }
 
+
             // Fonction pour vérifier si une main contient une suite
             static bool IsStraight(Dictionary<string, int> rankCount)
             {
@@ -396,7 +408,6 @@ namespace PokerCSharp
                 pot = 0;
 
                 //Mises et Tapis
-                int mise = 20;
                 tapisPlayer = false;
             }
         }
