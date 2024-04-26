@@ -4,14 +4,22 @@ using System.Reflection.Metadata;
 
 namespace PokerCSharp
 {
+    /// <summary>
+    /// Classe principale du programme de poker.
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// Méthode principale du programme.
+        /// </summary>
+        /// <param name="args">Arguments de la ligne de commande.</param>
         static void Main(string[] args)
         {
             //Mes librairies
             Card traitementCard = new Card();
             ia player = new ia();
             interact ui = new interact();
+            WinningConditions wc = new WinningConditions();
 
             //Mise en place des joueurs
             int joueurActuel = 0;
@@ -55,22 +63,25 @@ namespace PokerCSharp
                 int mise = 20;
                 bool tapisPlayer = false;
 
+                //1ere distribution de 3 cartes
                 traitementCard.FirstDistribution(ref deck, ref table, ref compteur);
+
+                //Montrer la table
                 ui.ShowTable(ref table);
 
-                Console.WriteLine("╔═══════════════════════╗");
-                Console.WriteLine($"║   Le pot est de :       ║");
-                Console.WriteLine($"║   {pot}                 ║");
-                Console.WriteLine("╚═══════════════════════╝");
+                //Montrer la valeur du pot
+                ui.ShowPot(ref pot);
 
                 // Faire jouer le joueur
                 if (!couche)
                 {
+                    //Montrer les cartes du joueur
                     ui.ShowCardPlayer(ref handPlayer);
-                    Console.WriteLine("╔═══════════════════════╗");
-                    Console.WriteLine($"║   Vous avez :           ║");
-                    Console.WriteLine($"║   {argent[0]} jetons      ║");
-                    Console.WriteLine("╚═══════════════════════╝");
+
+                    //Montrer le nombre de jetons du joueur
+                    ui.ShowPlayerMoney(ref argent);
+                    
+                    //Faire jouer l'urilisateur et vérifier si il se couche
                     couche = ui.FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
                 }
                 else
@@ -86,20 +97,24 @@ namespace PokerCSharp
                         player.JouerIa(i, ref mise, ref argent, ref pot);
                     }
 
+                    //Distribuer les cartes manquantes pour finaliser la partie
                     traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
                     traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+
+                    //Montrer la table
                     ui.ShowTable(ref table);
 
-                    Console.WriteLine("╔═══════════════════════╗");
-                    Console.WriteLine($"║   Le pot est de :       ║");
-                    Console.WriteLine($"║   {pot}                 ║");
-                    Console.WriteLine("╚═══════════════════════╝");
+                    //Montrer la valeur du pot
+                    ui.ShowPot(ref pot);
+
+                    //Montrer la table
+                    ui.ShowTable(ref table);
 
                     //Montrer les cartes des ia
                     ui.ShowOtherPlayersHands(ref handPlayer);
 
                     // Appel de DetermineWinner pour déterminer le gagnant
-                    DetermineWinner(ref handPlayer,ref table,ref argent, ref pot);
+                    wc.DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
 
                 }
                 else
@@ -110,22 +125,25 @@ namespace PokerCSharp
                         player.JouerIa(i, ref mise, ref argent, ref pot);
                     }
 
+                    //Distribuer une carte
                     traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+
+                    //Montrer la table
                     ui.ShowTable(ref table);
 
-                    Console.WriteLine("╔═══════════════════════╗");
-                    Console.WriteLine($"║   Le pot est de :       ║");
-                    Console.WriteLine($"║   {pot}                 ║");
-                    Console.WriteLine("╚═══════════════════════╝");
+                    //Montrer la valeur du pot
+                    ui.ShowPot(ref pot);
 
                     // Faire jouer le joueur
                     if (!couche)
                     {
+                        //Montrer les cartes du joueur
                         ui.ShowCardPlayer(ref handPlayer);
-                        Console.WriteLine("╔═══════════════════════╗");
-                        Console.WriteLine($"║   Vous avez :           ║");
-                        Console.WriteLine($"║   {argent[0]} jetons      ║");
-                        Console.WriteLine("╚═══════════════════════╝");
+
+                        //Montrer le nombre de jetons du joueur
+                        ui.ShowPlayerMoney(ref argent);
+
+                        //Faire jouer l'urilisateur et vérifier si il se couche
                         couche = ui.FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
                     }
                     else
@@ -141,19 +159,23 @@ namespace PokerCSharp
                             player.JouerIa(i, ref mise, ref argent, ref pot);
                         }
 
+                        //Distribuer une carte
                         traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+
+                        //Montrer la table
                         ui.ShowTable(ref table);
 
-                        Console.WriteLine("╔═══════════════════════╗");
-                        Console.WriteLine($"║   Le pot est de :       ║");
-                        Console.WriteLine($"║   {pot}                 ║");
-                        Console.WriteLine("╚═══════════════════════╝");
+                        //Montrer la valeur du pot
+                        ui.ShowPot(ref pot);
+
+                        //Montrer la table
+                        ui.ShowTable(ref table);
 
                         //Montrer les cartes des ia
                         ui.ShowOtherPlayersHands(ref handPlayer);
 
                         // Appel de DetermineWinner pour déterminer le gagnant
-                        DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
+                        wc.DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
                     }
                     else
                     {
@@ -163,22 +185,25 @@ namespace PokerCSharp
                             player.JouerIa(i, ref mise, ref argent, ref pot);
                         }
 
+                        //Distribuer les cartes manquantes pour finaliser la partie
                         traitementCard.DistributionToTable(ref deck, ref table, ref compteur);
+
+                        //Montrer la table
                         ui.ShowTable(ref table);
 
-                        Console.WriteLine("╔═══════════════════════╗");
-                        Console.WriteLine($"║   Le pot est de :       ║");
-                        Console.WriteLine($"║   {pot}                 ║");
-                        Console.WriteLine("╚═══════════════════════╝");
+                        //Montrer la valeur du pot
+                        ui.ShowPot(ref pot);
 
                         // Faire jouer le joueur
                         if (!couche)
                         {
+                            //Montrer les cartes du joueur
                             ui.ShowCardPlayer(ref handPlayer);
-                            Console.WriteLine("╔═══════════════════════╗");
-                            Console.WriteLine($"║   Vous avez :           ║");
-                            Console.WriteLine($"║   {argent[0]} jetons      ║");
-                            Console.WriteLine("╚═══════════════════════╝");
+
+                            //Montrer le nombre de jetons du joueur
+                            ui.ShowPlayerMoney(ref argent);
+
+                            //Faire jouer l'urilisateur et vérifier si il se couche
                             couche = ui.FaireJouerUser(ref pot, ref mise, ref argent, ref tapisPlayer);
                         }
                         else
@@ -192,22 +217,28 @@ namespace PokerCSharp
                             player.JouerIa(i, ref mise, ref argent, ref pot);
                         }
 
+                        //Montrer la table
+                        ui.ShowTable(ref table);
+
                         //Montrer les cartes des ia
                         ui.ShowOtherPlayersHands(ref handPlayer);
 
                         // Appel de DetermineWinner pour déterminer le gagnant
-                        DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
+                        wc.DetermineWinner(ref handPlayer, ref table, ref argent, ref pot);
                     }
 
                     Console.WriteLine("Voulez-vous continuer à jouer ? (Oui/Non)");
-                    string choixContinuerInput = Console.ReadLine();
+                    string? choixContinuerInput = Console.ReadLine();
 
-                    choixContinuerInput = choixContinuerInput.ToLower();
+                    if (choixContinuerInput != null)
+                    {
+                        choixContinuerInput = choixContinuerInput.ToLower();
+                    }
 
                     if (choixContinuerInput == "oui")
                     {
                         // Continuer le jeu
-                        Clear(ref suits, ref ranks, ref deck, ref handPlayer, ref compteur, ref table, ref pot, ref tapisPlayer);
+                        ui.Clear(ref suits, ref ranks, ref deck, ref handPlayer, ref compteur, ref table, ref pot, ref tapisPlayer);
                         Console.Clear();
                     }
                     else if (choixContinuerInput == "non")
@@ -222,193 +253,6 @@ namespace PokerCSharp
                         continuerJeu = false;
                     }
                 }
-            }
-
-            static void DetermineWinner(ref string[,] handPlayer, ref string[] table, ref int[] argent, ref int pot)
-            {
-                // Définir les valeurs des mains des joueurs actifs
-                Dictionary<int, int> playerValues = new Dictionary<int, int>(); // Mapping joueur -> valeur de la main
-                for (int i = 0; i < handPlayer.GetLength(0); i++)
-                {
-                    List<string> hand = new List<string>();
-                    for (int j = 0; j < handPlayer.GetLength(1); j++)
-                    {
-                        if (!string.IsNullOrEmpty(handPlayer[i, j]))
-                        {
-                            hand.Add(handPlayer[i, j]);
-                        }
-                    }
-                    hand.AddRange(table);
-
-                    // Évaluer la main du joueur seulement s'il n'est pas couché
-                    if (hand.Count > 0) // Vérifier si le joueur a au moins une carte en main
-                    {
-                        int value = EvaluateHand(hand.ToArray());
-                        playerValues.Add(i, value);
-                    }
-                }
-
-                // Trouver la valeur maximale
-                int maxValue = playerValues.Values.Max();
-
-                // Trouver les joueurs actifs avec la meilleure main
-                List<int> activeWinners = playerValues.Where(kv => kv.Value == maxValue).Select(kv => kv.Key).ToList();
-
-                // Vérifier s'il n'y a qu'un seul gagnant actif
-                if (activeWinners.Count == 1)
-                {
-                    int winner = activeWinners[0];
-                    argent[winner] += pot; // Le gagnant actif remporte tout le pot
-                    Console.WriteLine($"Le joueur {winner + 1} remporte le pot de {pot} jetons !");
-                    pot = 0; // Remettre le pot à zéro
-                }
-                else
-                {
-                    // Le pot est partagé entre les gagnants actifs
-                    int potPerWinner = pot / activeWinners.Count;
-                    foreach (int winner in activeWinners)
-                    {
-                        argent[winner] += potPerWinner;
-                    }
-                    Console.WriteLine("Il y a une égalité ! Le pot est partagé entre les joueurs gagnants.");
-                    pot = 0; // Remettre le pot à zéro
-                }
-            }
-
-
-            // Fonction pour évaluer la main des joueurs
-            static int EvaluateHand(string[] hand)
-            {
-                // Compter les occurrences de chaque rang et chaque couleur
-                Dictionary<string, int> rankCount = new Dictionary<string, int>();
-                Dictionary<string, int> suitCount = new Dictionary<string, int>();
-
-                foreach (string card in hand)
-                {
-                    string rank = card.Split(' ')[0];
-                    string suit = card.Split(' ')[1];
-
-                    if (!rankCount.ContainsKey(rank))
-                        rankCount[rank] = 1;
-                    else
-                        rankCount[rank]++;
-
-                    if (!suitCount.ContainsKey(suit))
-                        suitCount[suit] = 1;
-                    else
-                        suitCount[suit]++;
-                }
-
-                // Vérifier les combinaisons possibles
-                bool isFlush = suitCount.ContainsValue(5);
-                bool isStraight = IsStraight(rankCount);
-
-                // Évaluer la force de la main en fonction des combinaisons possibles
-                if (isFlush && isStraight)
-                {
-                    return 9; // Quinte flush
-                }
-                else if (rankCount.ContainsValue(4))
-                {
-                    return 8; // Carré
-                }
-                else if (rankCount.ContainsValue(3) && rankCount.ContainsValue(2))
-                {
-                    return 7; // Full
-                }
-                else if (isFlush)
-                {
-                    return 6; // Couleur
-                }
-                else if (isStraight)
-                {
-                    return 5; // Quinte
-                }
-                else if (rankCount.ContainsValue(3))
-                {
-                    return 4; // Brelan
-                }
-                else if (IsTwoPair(rankCount))
-                {
-                    return 3; // Double paire
-                }
-                else if (rankCount.ContainsValue(2))
-                {
-                    return 2; // Paire
-                }
-                else
-                {
-                    return 1; // Carte haute
-                }
-            }
-
-
-            // Fonction pour vérifier si une main contient une suite
-            static bool IsStraight(Dictionary<string, int> rankCount)
-            {
-                int count = 0;
-                foreach (var kvp in rankCount)
-                {
-                    if (kvp.Value == 1)
-                    {
-                        count++;
-                        if (count == 5)
-                            return true;
-                    }
-                    else
-                    {
-                        count = 0;
-                    }
-                }
-                return false;
-            }
-
-            // Fonction pour vérifier si une main contient deux paires
-            static bool IsTwoPair(Dictionary<string, int> rankCount)
-            {
-                int pairCount = 0;
-                foreach (var kvp in rankCount)
-                {
-                    if (kvp.Value == 2)
-                        pairCount++;
-
-                    if (pairCount == 2)
-                        return true;
-                }
-                return false;
-            }
-
-            static void Clear(ref List<string> suits, ref List<string> ranks, ref List<string> deck,
-                ref string[,] handPlayer, ref short compteur, ref string[] table, ref int pot, ref bool tapisPlayer)
-            {
-                // List
-                suits.Clear();
-                ranks.Clear();
-                deck.Clear();
-
-                // Tableau
-                Array.Clear(table, 0, table.Length);
-
-                // Compteur
-                compteur = 0;
-
-                // Matrice
-                int rows = handPlayer.GetLength(0);
-                int columns = handPlayer.GetLength(1);
-
-                for (int i = 0; i < rows; i++)
-                {
-                    for (int j = 0; j < columns; j++)
-                    {
-                        handPlayer[i, j] = null;
-                    }
-                }
-
-                // Pot
-                pot = 0;
-
-                //Mises et Tapis
-                tapisPlayer = false;
             }
         }
     }

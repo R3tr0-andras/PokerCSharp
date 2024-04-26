@@ -6,8 +6,18 @@ using System.Threading.Tasks;
 
 namespace PokerCSharp
 {
+    /// <summary>
+    /// Cette structure contient la méthode pour faire jouer les ia.
+    /// </summary>
     public struct ia
     {
+        /// <summary>
+        /// Méthode représentant le comportement de l'intelligence artificielle pour jouer.
+        /// </summary>
+        /// <param name="i">L'indice du joueur ia.</param>
+        /// <param name="mise">La mise actuelle dans la partie.</param>
+        /// <param name="argent">Tableau représentant l'argent de chaque joueur.</param>
+        /// <param name="pot">Le pot de la partie.</param>
         public void JouerIa(int i, ref int mise, ref int[] argent, ref int pot)
         {
             Random rand = new Random();
